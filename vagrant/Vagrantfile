@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus = "2"
+  end
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
+  config.vm.network "forwarded_port", guest: 9311, host: 9311
+  config.vm.provision "file", source: "../patch/simple_crypto.py", destination: "/home/vagrant/simple_crypto.py"
+  config.vm.provision "shell", path: "install.sh", privileged: false
+  config.vm.synced_folder "./devstack", "/opt/stack", create: true
+  config.vm.synced_folder "./flask-app", "/home/vagrant/flask-app", create: true
+  config.vm.provision "file", source: "../src/", destination: "/home/vagrant/flask-app/src/"
+end

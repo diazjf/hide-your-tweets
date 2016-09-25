@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hide Yo Kids, Hide Yo Tweets</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="/static/stylesheets/style.css" />
+</head>
+<body>
+	<table>
+		<tr>
+			<td style='width: 50%;'><img class = 'newappIcon' src='/static/images/1.jpg'>
+			</td>
+			<td>
+				<h1 id="message">Hide Yo Kids, Hide Yo Tweets</h1>
+        {% block content %}
+          <form action="" method="post" name="login">
+              {{ form.hidden_tag() }}
+              <p>
+                  Enter an encrypted tweet:
+									<br>
+                  {{ form.decrypt_text(size=200) }}<br>
+									{% for error in form.decrypt_text.errors %}
+            					<span style="color: red;">[{{ error }}]</span>
+									{% endfor %}
+									<input type="submit" name="submit" value="submit"
+							</p>
+          </form>
+					{% with messages = get_flashed_messages() %}
+  					{% if messages %}
+    					<ul class=flashes>
+    						{% for message in messages %}
+      						<h2>Decrypted Tweet: {{ message }}</h2>
+    						{% endfor %}
+    					</ul>
+  					{% endif %}
+					{% endwith %}
+        {% endblock %}
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
