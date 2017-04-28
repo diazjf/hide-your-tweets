@@ -1,10 +1,9 @@
 # Hide Your Tweets #
 
-![alt tag](src/static/images/1.jpg)
-
 Hide Your Tweets is a sample app, providing a text encryption use case for
 OpenStack Barbican. This application allows you to encrypt a short message,
-which can then be directly posted to twitter. It also allows for decryption of the tweet.
+which can then be directly posted to Twitter. It also allows for decryption
+of the tweet.
 
 ## Setting Up Your Environment ##
 
@@ -61,5 +60,4 @@ directory. You will need to restart the flask web-server after each edit.
 ## Disclaimer ##
 
 This is intended just for testing purposes and is not to be used for a
-production system. It is by no means secure. The name of the application
-is based of off the famous Hide your Kids, Hide your Wife [youtube video](https://www.youtube.com/watch?v=EzNhaLUT520).
+production system. It is by no means secure.
