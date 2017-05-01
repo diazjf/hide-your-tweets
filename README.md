@@ -38,8 +38,7 @@ You are now in the virtual machine.
 We can configure and start up the flask
 application by performing the following:
 
-1. `source /home/vagrant/devstack/openrc admin admin` # Source Admin Credentials from openrc file
-   `source ~/openrc`
+1. `source /home/ubuntu/devstack/openrc admin admin` # Source Admin Credentials from openrc file
 2. `SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)` # Generate Random String
 3. `openstack secret store --payload $SECRET ` # Create a Secret
 4. `export OS_SECRET_UUID=<secret_uuid>` # Set secret uuid given the href obtained in step 3

@@ -10,8 +10,9 @@ def get_context():
     credentials"""
     username = os.getenv('OS_USERNAME', None)
     password = os.getenv('OS_PASSWORD', None)
-    auth_url = os.getenv('OS_AUTH_URL', None)
+    auth_url = os.getenv('OS_AUTH_URL', None) + '/v' + os.getenv('OS_IDENTITY_API_VERSION', None)
     project_name = os.getenv('OS_PROJECT_NAME', None)
+
     auth = identity.V3Password(auth_url=auth_url,
                                username=username,
                                password=password,

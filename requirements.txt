@@ -8,3 +8,4 @@ python-barbicanclient
 oslo.context
 #oslo.config
 castellan
+packaging>=16.8

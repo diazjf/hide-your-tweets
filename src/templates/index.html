@@ -1,23 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Hide Yo Tweets</title>
+	<title>Hide Your Tweets</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="/static/stylesheets/style.css" />
 </head>
 <body>
+<div id="container">
 	<table>
 		<tr>
-			<!-- TODO: insert image here <td style='width: 50%;'><img class = 'newappIcon' src=''>-->
-			</td>
 			<td>
-				<h1 id="message">Hide Yo Tweets</h1>
+				<h1 id="message">Encrypt a tweet</h1>
+				{% block tweet_content %}
+					<form action="" method="post" name="login">
 
-        <li><a href="tweet" target="_blank">Send Encrypted Tweet</a></li>
-        <li><a href="decrypt" target="_blank">Decrypted Tweet</a></li>
+					{{ tweet_form.hidden_tag() }}
+						<p>
+                                                        Enter a tweet:
+                                                        {{ tweet_form.tweet_text(size=15) }}
+                                                        <br>
+                                                        {% for error in tweet_form.tweet_text.errors %}
+                                                                <span style="color: red;">[{{ error }}]</span>
+                                                        {% endfor %}
+                                                        <input type="submit" name="encrypt" value="encrypt">
+                                                </p>
+					</form>
+				{% endblock %}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<h1 id="message">Decrypt a tweet</h1>
+				{% block decrypt_content %}
+					<form action="" method="post" name="login">
+					{{ decrypt_form.hidden_tag() }}
+						<p>
+							Enter an encrypted tweet:
+							<br>
+							{{ decrypt_form.decrypt_text(size=200) }}
+							<br>
+							{% for error in decrypt_form.decrypt_text.errors %}
+								<span style="color: red;">[{{ error }}]</span>
+							{% endfor %}
+							<input type="submit" name="decrypt" value="decrypt">
+						</p>
+					</form>
+			</td>
+		</tr>
+		<tr>
+			<td>
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							<ul class=flashes>
+							{% for message in messages %}
+								{% if message|length > 15  %}
+								<h2>Encrypted text:</h2>
+								<p id="result">{{ message }}</p>
 
+								<a href="https://twitter.com/intent/tweet?text={{ message }}" target="_blank"><button>Tweet this!</button></a>
+
+								{% else %}
+								<h2>Decrypted text:</h2>
+								<p id="result">{{ message }}</p>
+								{% endif %}
+							{% endfor %}
+							</ul>
+						{% endif %}
+					{% endwith %}
+				{% endblock %}
 			</td>
 		</tr>
 	</table>
+	<div id="images">
+		<a href="https://xkcd.com/257/" target="_blank">
+			<img border="0" src="https://imgs.xkcd.com/comics/code_talkers.png" >
+		</a>
+	</div>
+</div>
 </body>
 </html>
