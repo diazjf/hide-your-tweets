@@ -77,7 +77,7 @@ def index():
         except Exception as e:
             return render_template('wrong.html', error=e)
     else:
-       try: 
+       try:
            return render_template('index.html',
                                    title='Hide Yo Kids, Hide Yo Tweets',
                                    tweet_form=tweet_form,

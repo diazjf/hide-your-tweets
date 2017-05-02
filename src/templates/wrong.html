@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Hide Yo Tweets</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="/static/stylesheets/style.css" />
 </head>
+
 <body>
-	<table>
-		<tr>
-			<!-- TODO: insert image here <td style='width: 50%;'><img class = 'newappIcon' src=''> -->
-			</td>
-			<td>
-				<h1 id="message">Error!</h1>
-        <p>"{{ error }}"</p>
-        <p> Most likely:
-          <li>You are encrypting with the wrong key.</li>
-          <li>You can't decrypt the info with the key being used.</li>
-			</td>
-		</tr>
-	</table>
+	<div id="container">
+		<table>
+			<tr>
+				<td>
+					<h1 id="message">Error!</h1>
+					<p>"{{ error }}"</p>
+					<p>
+						<h2>Most likely:</h2>
+						<li>You are encrypting with the wrong key.</li>
+						<li>You can't decrypt the info with the key being used.</li>
+					</p>
+				</td>
+			</tr>
+		</table>
+
+		<div id="images">
+			<a href="https://xkcd.com/593/" target="_blank">
+				<img border="0" src="https://imgs.xkcd.com/comics/voynich_manuscript.png">
+			</a>
+		</div>
+	</div>
 </body>
+
 </html>

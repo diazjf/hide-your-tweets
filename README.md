@@ -32,18 +32,19 @@ commands in order:
 3. `vagrant up` # This will take a bit, since it install devstack
 4. `vagrant ssh` # If asked, Password is `vagrant`
 
-You are now in the virtual machine. 
+You are now in the virtual machine.
 
 ## Running the App ##
-We can configure and start up the flask
-application by performing the following:
+
+We can configure and start up the flask application by performing the following:
 
 1. `source /home/ubuntu/devstack/openrc admin admin` # Source Admin Credentials from openrc file
 2. `SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)` # Generate Random String
 3. `openstack secret store --payload $SECRET ` # Create a Secret
-4. `export OS_SECRET_UUID=<secret_uuid>` # Set secret uuid given the href obtained in step 3
-5. `cd src`
-6. `python server.py`
+4. `export OS_SECRET_UUID=<secret_uuid>` # Set secret uuid given in the href obtained in step 3
+  - Example: `4d5fca-b822-4517-af45-04de5c2df980`
+5. Change Directory to the Source folder of the flask-app containing the `server.py` file.
+6. `python server.py` # Startup the Application
 
 The application is now running on your vagrant VM.
 
@@ -53,7 +54,7 @@ To use the application, simply point your browser to `127.0.0.1:8000`.
 
 ## Editing the Application
 
-To edit the application, simply edit the files in the local `/vagrant/flask-app`
+To edit the application, simply edit the files in the local `/home/ubuntu/flask-app`
 directory. You will need to restart the flask web-server after each edit.
 
 ## Disclaimer ##

@@ -1,81 +1,69 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Hide Your Tweets</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="/static/stylesheets/style.css" />
 </head>
+
 <body>
-<div id="container">
-	<table>
-		<tr>
-			<td>
-				<h1 id="message">Encrypt a tweet</h1>
-				{% block tweet_content %}
+	<div id="container">
+		<table>
+			<tr>
+				<td>
+					<h1 id="message">Encrypt a tweet</h1> {% block tweet_content %}
 					<form action="" method="post" name="login">
 
-					{{ tweet_form.hidden_tag() }}
+						{{ tweet_form.hidden_tag() }}
 						<p>
-                                                        Enter a tweet:
-                                                        {{ tweet_form.tweet_text(size=15) }}
-                                                        <br>
-                                                        {% for error in tweet_form.tweet_text.errors %}
-                                                                <span style="color: red;">[{{ error }}]</span>
-                                                        {% endfor %}
-                                                        <input type="submit" name="encrypt" value="encrypt">
-                                                </p>
+							Enter a tweet: {{ tweet_form.tweet_text(size=15) }}
+							<br> {% for error in tweet_form.tweet_text.errors %}
+							<span style="color: red;">[{{ error }}]</span> {% endfor %}
+							<input type="submit" name="encrypt" value="encrypt">
+						</p>
 					</form>
-				{% endblock %}
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<h1 id="message">Decrypt a tweet</h1>
-				{% block decrypt_content %}
+					{% endblock %}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h1 id="message">Decrypt a tweet</h1> {% block decrypt_content %}
 					<form action="" method="post" name="login">
-					{{ decrypt_form.hidden_tag() }}
+						{{ decrypt_form.hidden_tag() }}
 						<p>
 							Enter an encrypted tweet:
-							<br>
-							{{ decrypt_form.decrypt_text(size=200) }}
-							<br>
-							{% for error in decrypt_form.decrypt_text.errors %}
-								<span style="color: red;">[{{ error }}]</span>
-							{% endfor %}
+							<br> {{ decrypt_form.decrypt_text(size=200) }}
+							<br> {% for error in decrypt_form.decrypt_text.errors %}
+							<span style="color: red;">[{{ error }}]</span> {% endfor %}
 							<input type="submit" name="decrypt" value="decrypt">
 						</p>
 					</form>
-			</td>
-		</tr>
-		<tr>
-			<td>
-					{% with messages = get_flashed_messages() %}
-						{% if messages %}
-							<ul class=flashes>
-							{% for message in messages %}
-								{% if message|length > 15  %}
-								<h2>Encrypted text:</h2>
-								<p id="result">{{ message }}</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{% with messages = get_flashed_messages() %} {% if messages %}
+					<ul class=flashes>
+						{% for message in messages %} {% if message|length > 15 %}
+						<h2>Encrypted text:</h2>
+						<p id="result">{{ message }}</p>
 
-								<a href="https://twitter.com/intent/tweet?text={{ message }}" target="_blank"><button>Tweet this!</button></a>
-
-								{% else %}
-								<h2>Decrypted text:</h2>
-								<p id="result">{{ message }}</p>
-								{% endif %}
-							{% endfor %}
-							</ul>
-						{% endif %}
-					{% endwith %}
-				{% endblock %}
-			</td>
-		</tr>
-	</table>
-	<div id="images">
-		<a href="https://xkcd.com/257/" target="_blank">
-			<img border="0" src="https://imgs.xkcd.com/comics/code_talkers.png" >
-		</a>
+						<a href="https://twitter.com/intent/tweet?text={{ message }}" target="_blank"><button>Tweet this!</button></a> {% else %}
+						<h2>Decrypted text:</h2>
+						<p id="result">{{ message }}</p>
+						{% endif %} {% endfor %}
+					</ul>
+					{% endif %} {% endwith %} {% endblock %}
+				</td>
+			</tr>
+		</table>
+		<div id="images">
+			<a href="https://xkcd.com/257/" target="_blank">
+				<img border="0" src="https://imgs.xkcd.com/comics/code_talkers.png">
+			</a>
+		</div>
 	</div>
-</div>
 </body>
+
 </html>
