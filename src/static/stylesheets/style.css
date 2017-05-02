@@ -2,8 +2,7 @@
  * This file provides css styles.
  */
 body, html {
-	/*background-color: #3d3d5c;*/
-        /*background-image: url('../images/background.png');*/
+        background-image: url('../images/background.png');
         background-size: cover;
 	background-repeat: no-repeat;
 	width: 100%;
