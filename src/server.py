@@ -1,84 +1,89 @@
 import os
 import base64
 
-import bbc_auth
 import forms
+import kmgr_auth
 
+from castellan import key_manager
 from cryptography.fernet import Fernet
 from flask import Flask
 from flask import render_template, flash, redirect
 from flask import request
-
+from oslo_config import cfg
 
 app = Flask(__name__)
 app.config.from_object('config')
 
 
+def get_config():
+    config = cfg.ConfigOpts()
+    config(['--config-file', 'castellan.conf'])
+    return config
+
 def get_secret():
     """Authenticates user and obtains the one time use key"""
-    barbican = bbc_auth.get_auth()
-    secret_url = os.getenv('OS_SECRET_URL', None)
-    secret = barbican.secrets.get(secret_url)
-    return secret
+    ctxt = kmgr_auth.get_context()
+    config = get_config()
+    kmgr = key_manager.API(config)
+    secret_uuid = os.getenv('OS_SECRET_UUID', None)
+    secret = kmgr.get(ctxt, secret_uuid)
+    return secret.get_encoded()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
 def index():
-    return render_template('index.html',
-                           title='Hide Yo Kids, Hide Yo Tweets')
+    tweet_form = forms.TweetForm()
+    decrypt_form = forms.DecryptForm()
+    if 'encrypt' in request.form and tweet_form.validate_on_submit():
+        try:
+            txt = str(tweet_form['tweet_text'].data)
+            secret = get_secret()
 
+            b64_secret = base64.urlsafe_b64encode(secret)
+            f = Fernet(b64_secret)
 
-@app.route('/tweet', methods=['GET', 'POST'])
-def generate_tweet():
-    form = forms.TweetForm()
-    if form.validate_on_submit():
-        if 'submit' in request.form:
-            try:
-                txt = str(form['tweet_text'].data)
-                secret = get_secret()
+            encrypted_txt = str(f.encrypt(txt))
 
-                payload = base64.urlsafe_b64encode(secret.payload)
-                f = Fernet(payload)
+            # adds decrypted message to decrypt.html and then renders it
+            flash(encrypted_txt)
+            return render_template('index.html',
+                                   title='Hide Yo Kids, Hide Yo Tweets',
+                                   decrypt_form=decrypt_form,
+                                   tweet_form=tweet_form)
 
-                encrypted_txt = str(f.encrypt(txt))
+        except Exception as e:
+            return render_template('wrong.html', error=e)
 
-            except Exception:
-                return render_template('wrong.html')
+        return redirect("https://twitter.com/intent/tweet?text=" +
+                        encrypted_txt, code=302)
 
-            return redirect("https://twitter.com/intent/tweet?text=" +
-                            encrypted_txt, code=302)
+    elif 'decrypt' in request.form and decrypt_form.validate_on_submit():
+        try:
+            txt = str(decrypt_form['decrypt_text'].data)
+            secret = get_secret()
+            b64_secret = base64.urlsafe_b64encode(secret)
+            f = Fernet(b64_secret)
+
+            decrypted_txt = str(f.decrypt(txt))
+
+            # adds decrypted message to decrypt.html and then renders it
+            flash(decrypted_txt)
+            return render_template('index.html',
+                                   title='Hide Yo Kids, Hide Yo Tweets',
+                                   decrypt_form=decrypt_form,
+                                   tweet_form=tweet_form)
+
+        except Exception as e:
+            return render_template('wrong.html', error=e)
     else:
-        return render_template('tweet.html',
-                               title='Hide Yo Kids, Hide Yo Tweets',
-                               form=form)
-
-
-@app.route('/decrypt', methods=['GET', 'POST'])
-def decrypt():
-    form = forms.DecryptForm()
-    if form.validate_on_submit():
-        if 'submit' in request.form:
-            try:
-                txt = str(form['decrypt_text'].data)
-                secret = get_secret()
-                payload = base64.urlsafe_b64encode(secret.payload)
-                f = Fernet(payload)
-
-                decrypted_txt = str(f.decrypt(txt))
-
-                # adds decrypted message to decrypt.html and then renders it
-                flash(decrypted_txt)
-                return render_template('decrypt.html',
-                                       title='Hide Yo Kids, Hide Yo Tweets',
-                                       form=form)
-
-            except Exception:
-                return render_template('wrong.html')
-    else:
-        return render_template('decrypt.html',
-                               title='Hide Yo Kids, Hide Yo Tweets',
-                               form=form)
+       try: 
+           return render_template('index.html',
+                                   title='Hide Yo Kids, Hide Yo Tweets',
+                                   tweet_form=tweet_form,
+                                   decrypt_form=decrypt_form)
+       except Exception as e:
+           return render_template('wrong.html', error=e)
 
 
 # Read port selected by the cloud for our application

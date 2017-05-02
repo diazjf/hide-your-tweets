@@ -1,0 +1,11 @@
+Flask==0.10.0
+Flask-WTF==0.12
+WTForms==2.1
+pytz
+cryptography
+keystoneauth1
+python-barbicanclient
+oslo.context
+#oslo.config
+castellan
+packaging>=16.8
